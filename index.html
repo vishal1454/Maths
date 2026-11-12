@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department of Mathematics | Grouped Data & Cumulative Frequency Portal</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts: Inter & JetBrains Mono for tabular numbers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for crisp academic & UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#1e3a5f',
+                            900: '#0f2342',
+                            950: '#091529',
+                        },
+                        gold: {
+                            500: '#d97706',
+                            600: '#b45309',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom subtle transitions and tabular number formatting */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-modal {
+            animation: modalFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-navy-900 selection:text-white">
+
+    <!-- ===================================================================== -->
+    <!-- INITIALIZATION SECURITY & FACULTY REVIEW MODAL                        -->
+    <!-- ===================================================================== -->
+    <div id="init-modal-backdrop" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 transition-opacity duration-300">
+        <div id="init-modal-card" class="animate-modal bg-white border-t-4 border-amber-500 rounded-xl shadow-2xl max-w-lg w-full overflow-hidden">
+            <!-- Modal Header -->
+            <div class="bg-amber-50 border-b border-amber-200 px-6 py-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-300">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block">System Initialization Notice</span>
+                    <h2 class="text-base font-bold text-slate-900">Faculty & Security Review Status</h2>
+                </div>
+            </div>
+
+            <!-- Modal Body (Exact Required Notice) -->
+            <div class="p-6 space-y-4">
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-slate-800 text-sm sm:text-base leading-relaxed font-medium shadow-inner">
+                    <p>
+                        "Alert: This website is not secure. Website under review by the faculty. This web is made by <span class="font-mono font-semibold text-navy-900 bg-slate-200/70 px-1.5 py-0.5 rounded">bot1454</span> on order from <span class="font-semibold text-navy-900">Mr.Vishal(appmakervishal)</span>, and website is in review from Vishal and his institution."
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                        Status: Pending Institutional Audit
+                    </span>
+                    <span class="font-mono">Order: #gom-mat-11-11</span>
+                </div>
+            </div>
+
+            <!-- Modal Action Footer -->
+            <div class="bg-slate-50 border-t border-slate-200 px-6 py-4 flex justify-end">
+                <button id="acknowledge-btn" type="button" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-navy-900 hover:bg-navy-800 active:bg-navy-950 text-white font-semibold text-sm px-6 py-3 rounded-lg shadow-sm transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-navy-900 focus:ring-offset-2">
+                    <span>Acknowledge & Enter Portal</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- TOP INSTITUTIONAL NAVIGATION BAR                                      -->
+    <!-- ===================================================================== -->
+    <header class="bg-navy-950 text-white border-b border-navy-800 sticky top-0 z-30 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3.5 gap-3">
+                <!-- Institution Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-navy-800 border border-slate-600/50 flex items-center justify-center text-amber-400 shrink-0 shadow-inner">
+                        <i class="fa-solid fa-building-columns text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-widest text-amber-400">Department of Mathematics & Quantitative Studies</span>
+                        </div>
+                        <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">Grouped Data & Cumulative Frequency Analysis</h1>
+                    </div>
+                </div>
+
+                <!-- Navigation Pills & Review Status Badge -->
+                <div class="flex items-center justify-between sm:justify-end gap-3">
+                    <nav class="flex items-center bg-navy-900/90 p-1 rounded-lg border border-navy-800">
+                        <a href="#rules-section" class="text-xs font-medium px-3 py-1.5 rounded-md text-slate-200 hover:text-white hover:bg-navy-800 transition">4-Rule Framework</a>
+                        <a href="#matrix-section" class="text-xs font-medium px-3 py-1.5 rounded-md text-slate-200 hover:text-white hover:bg-navy-800 transition">Reference Matrix</a>
+                        <a href="#simulator-section" class="text-xs font-semibold px-3 py-1.5 rounded-md bg-amber-500 text-navy-950 hover:bg-amber-400 transition shadow-sm">Practice Lab</a>
+                    </nav>
+                    <button id="reopen-notice-btn" title="View Faculty Review Notice" class="text-xs bg-navy-800 hover:bg-navy-700 text-amber-300 border border-amber-500/30 px-2.5 py-2 rounded-lg transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span class="hidden md:inline">Review Notice</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- MAIN ACADEMIC PORTAL CONTENT                                          -->
+    <!-- ===================================================================== -->
+    <main class="flex-grow">
+        <!-- Hero Banner -->
+        <section class="bg-gradient-to-b from-navy-900 to-navy-800 text-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+                <div class="max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-navy-950/60 border border-slate-600/40 text-xs font-medium text-amber-300">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Curriculum Module: Secondary & Higher Secondary Statistics</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                        Mastering Frequency ($f$) & Cumulative Frequency ($cf$) Distributions
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        A structured analytical framework for identifying standard class frequencies, "Less Than" cumulative distributions, and "More Than" reverse cumulative distributions—eliminating boundary errors in Mean, Median, and Mode computations.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: THE 4-RULE DIAGNOSTIC SYSTEM -->
+        <section id="rules-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-2 border-b border-slate-200 pb-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-navy-800">Section 01 • Core Methodology</span>
+                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-0.5">The 4-Rule Table Diagnostic System</h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-500">Apply these four rules sequentially before computing central tendency.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Rule 1 -->
+                <article class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 border border-blue-200">
+                                Rule 01
+                            </span>
+                            <span class="font-mono text-xs font-semibold text-slate-500">Target: Frequency (f)</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">Proper Class Limits = Standard Frequency ($f$)</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            Whenever Class Intervals display explicit upper and lower limits (such as <span class="font-mono text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">10–20</span>, <span class="font-mono text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">20–30</span>, or <span class="font-mono text-slate-800 bg-slate-100 px-1.5 py-0.5 rounded">85–100</span>), the count column is <strong>always Frequency ($f$)</strong>—even if the intervals or counts are listed in descending or mixed order.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-xs text-slate-700 flex items-center justify-between">
+                        <span><strong>Verification Check:</strong> Sum of all values equals total sample size ($\sum f = N$).</span>
+                        <i class="fa-solid fa-check-circle text-emerald-600 text-sm"></i>
+                    </div>
+                </article>
+
+                <!-- Rule 2 -->
+                <article class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200">
+                                Rule 02
+                            </span>
+                            <span class="font-mono text-xs font-semibold text-slate-500">Target: Standard cf</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">"Less Than" / "Below" = Standard $cf$</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            If intervals are phrased as <em>"Less than 20"</em> or <em>"Below 30"</em>, the given column is <strong>Standard Cumulative Frequency ($cf$)</strong>. Because totals accumulate downward, values <strong>never decrease</strong> (they strictly increase or remain constant).
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-xs text-slate-700 flex items-center justify-between">
+                        <span><strong>Extraction Formula:</strong> Subtract top from bottom (<span class="font-mono font-semibold">f<sub>k</sub> = cf<sub>k</sub> − cf<sub>k−1</sub></span>).</span>
+                        <i class="fa-solid fa-arrow-trend-up text-indigo-600 text-sm"></i>
+                    </div>
+                </article>
+
+                <!-- Rule 3 -->
+                <article class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
+                                Rule 03
+                            </span>
+                            <span class="font-mono text-xs font-semibold text-slate-500">Target: Reverse cf</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">"More Than" / "Above" = Reverse $cf$</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            If intervals are phrased as <em>"More than 10"</em> or <em>"Above 20"</em>, the given column is <strong>Reverse Cumulative Frequency</strong>. Starting from total $N$, values <strong>never increase</strong> as you move down the table.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-xs text-slate-700 flex items-center justify-between">
+                        <span><strong>Extraction Formula:</strong> Subtract bottom from top (<span class="font-mono font-semibold">f<sub>k</sub> = cf<sub>k</sub> − cf<sub>k+1</sub></span>).</span>
+                        <i class="fa-solid fa-arrow-trend-down text-amber-600 text-sm"></i>
+                    </div>
+                </article>
+
+                <!-- Rule 4 -->
+                <article class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                Rule 04
+                            </span>
+                            <span class="font-mono text-xs font-semibold text-slate-500">Boundary Indicator</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">The Zero (0) Boundary Giveaway</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                            A cumulative column starting with <span class="font-mono font-semibold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">0, 5, 12...</span> confirms a <strong>"Less Than"</strong> distribution. Conversely, a column ending with <span class="font-mono font-semibold text-slate-900 bg-slate-100 px-1.5 py-0.5 rounded">...12, 7, 0</span> confirms a <strong>"More Than"</strong> distribution.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-xs text-slate-700 flex items-center justify-between">
+                        <span><strong>Boundary Action:</strong> Use the 0 row to subtract cleanly, then drop the 0-frequency row.</span>
+                        <i class="fa-solid fa-filter text-emerald-600 text-sm"></i>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MASTER REFERENCE MATRIX -->
+        <section id="matrix-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-navy-900 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Section 02 • Quick Reference</span>
+                        <h3 class="text-lg font-bold text-white">Master Distribution Classification Matrix</h3>
+                    </div>
+                    <span class="text-xs text-slate-300 font-mono">Standardized Examination Protocol</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-700">
+                                <th class="py-3.5 px-6">Class Interval Format</th>
+                                <th class="py-3.5 px-6">Column Behavior Pattern</th>
+                                <th class="py-3.5 px-6">Identification</th>
+                                <th class="py-3.5 px-6">Required Mathematical Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-sm">
+                            <tr class="hover:bg-slate-50/80 transition">
+                                <td class="py-4 px-6 font-semibold text-slate-900">
+                                    Proper Limits
+                                    <span class="block text-xs font-mono font-normal text-slate-500 mt-0.5">e.g., 10–20, 20–30</span>
+                                </td>
+                                <td class="py-4 px-6 text-slate-600">
+                                    Any order (ascending, descending, or mixed); sums to $N$
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-900">
+                                        Frequency (f)
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-slate-700">
+                                    Use directly for <strong>Mean</strong> & <strong>Mode</strong>; accumulate into $cf$ for <strong>Median</strong>.
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition">
+                                <td class="py-4 px-6 font-semibold text-slate-900">
+                                    Less Than / Below
+                                    <span class="block text-xs font-mono font-normal text-slate-500 mt-0.5">e.g., Less than 20</span>
+                                </td>
+                                <td class="py-4 px-6 text-slate-600">
+                                    Never decreases (goes up or stays same)
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-indigo-100 text-indigo-900">
+                                        Standard cf
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-slate-700">
+                                    Subtract top from bottom (<span class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">Current − Previous</span>) to extract $f$.
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition">
+                                <td class="py-4 px-6 font-semibold text-slate-900">
+                                    More Than / Above
+                                    <span class="block text-xs font-mono font-normal text-slate-500 mt-0.5">e.g., More than 10</span>
+                                </td>
+                                <td class="py-4 px-6 text-slate-600">
+                                    Never increases (goes down or stays same)
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900">
+                                        Reverse cf
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-slate-700">
+                                    Subtract bottom from top (<span class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">Current − Next</span>) to extract $f$.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: INTERACTIVE STUDENT GAME / DIAGNOSTIC SIMULATOR -->
+        <section id="simulator-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden">
+                <!-- Simulator Top Header -->
+                <div class="bg-navy-950 text-white px-6 py-5 border-b border-navy-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded bg-amber-500 text-navy-950 font-bold text-xs uppercase tracking-wider">Interactive Student Lab</span>
+                            <span class="text-xs text-slate-400 font-mono">Simulation Mode</span>
+                        </div>
+                        <h3 class="text-xl font-bold mt-1">Table Diagnostic & Frequency Extraction Challenge</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Inspect the given dataset, classify the column type, and extract the true interval frequency ($f$).</p>
+                    </div>
+
+                    <!-- Score & Streak Counter -->
+                    <div class="flex items-center gap-3 self-start md:self-auto">
+                        <div class="bg-navy-900 border border-navy-700 rounded-xl px-4 py-2 text-center">
+                            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Score</span>
+                            <span id="sim-score" class="font-mono text-lg font-bold text-amber-400 tabular-nums">0</span>
+                        </div>
+                        <div class="bg-navy-900 border border-navy-700 rounded-xl px-4 py-2 text-center">
+                            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Streak</span>
+                            <span id="sim-streak" class="font-mono text-lg font-bold text-emerald-400 tabular-nums">0 🔥</span>
+                        </div>
+                        <button id="next-problem-btn" type="button" class="bg-navy-800 hover:bg-navy-700 text-white text-xs font-semibold px-3.5 py-3 rounded-xl border border-slate-600/50 transition cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-shuffle"></i>
+                            <span>New Dataset</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulator Workspace -->
+                <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Left: Dataset Table Display -->
+                    <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden">
+                        <div class="bg-slate-200/70 px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+                            <span id="dataset-title" class="text-xs font-bold uppercase tracking-wider text-slate-700">Dataset #1: Bowling Speeds</span>
+                            <span id="dataset-badge" class="text-[11px] font-mono bg-white px-2 py-0.5 rounded border border-slate-300 text-slate-600">5 Rows</span>
+                        </div>
+                        <div class="p-4">
+                            <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden border border-slate-200">
+                                <thead>
+                                    <tr class="bg-navy-900 text-white text-xs uppercase">
+                                        <th id="col-1-header" class="py-2.5 px-4 text-left font-semibold">Class Interval</th>
+                                        <th id="col-2-header" class="py-2.5 px-4 text-right font-semibold">Given Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sim-table-body" class="divide-y divide-slate-200 font-mono tabular-nums">
+                                    <!-- Populated dynamically via JS -->
+                                </tbody>
+                            </table>
+                            <p class="text-xs text-slate-500 mt-3 flex items-center gap-1.5">
+                                <i class="fa-solid fa-highlighter text-amber-600"></i>
+                                <span>Highlighted row indicates the target interval for Step 2.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Two-Step Interactive Assessment -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <!-- Step 1: Identify Column Type -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-6 h-6 rounded-full bg-navy-900 text-white text-xs font-bold flex items-center justify-center">1</span>
+                                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Classify the "Given Value" Column</h4>
+                            </div>
+                            <p class="text-xs text-slate-500 mb-3">Based on the interval labels and numerical behavior, what does the second column represent?</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="type-options">
+                                <button type="button" data-type="f" class="type-btn border-2 border-slate-200 hover:border-navy-800 rounded-lg p-3 text-left transition cursor-pointer">
+                                    <span class="block font-bold text-sm text-slate-900">Frequency (f)</span>
+                                    <span class="block text-[11px] text-slate-500 mt-0.5">Direct interval count</span>
+                                </button>
+                                <button type="button" data-type="standard_cf" class="type-btn border-2 border-slate-200 hover:border-navy-800 rounded-lg p-3 text-left transition cursor-pointer">
+                                    <span class="block font-bold text-sm text-slate-900">Standard cf</span>
+                                    <span class="block text-[11px] text-slate-500 mt-0.5">"Less than" cumulative</span>
+                                </button>
+                                <button type="button" data-type="reverse_cf" class="type-btn border-2 border-slate-200 hover:border-navy-800 rounded-lg p-3 text-left transition cursor-pointer">
+                                    <span class="block font-bold text-sm text-slate-900">Reverse cf</span>
+                                    <span class="block text-[11px] text-slate-500 mt-0.5">"More than" cumulative</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Calculate Actual Frequency (f) -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-6 h-6 rounded-full bg-navy-900 text-white text-xs font-bold flex items-center justify-center">2</span>
+                                <h4 id="step2-question" class="font-bold text-slate-900 text-sm sm:text-base">Extract Actual Frequency ($f$) for the Highlighted Row</h4>
+                            </div>
+                            <p id="step2-hint" class="text-xs text-slate-500 mb-4">Apply the subtraction rule (or read directly if already $f$).</p>
+
+                            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                                <div class="relative flex-grow max-w-xs">
+                                    <label for="freq-input" class="sr-only">Extracted Frequency Value</label>
+                                    <input type="number" id="freq-input" placeholder="Enter exact frequency (f)..." class="w-full font-mono text-sm border-2 border-slate-300 focus:border-navy-900 focus:outline-none rounded-lg px-4 py-2.5 text-slate-900">
+                                </div>
+                                <button id="verify-answer-btn" type="button" class="bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm px-6 py-2.5 rounded-lg shadow-sm transition cursor-pointer flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>Verify Solution</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Feedback & Mathematical Explanation Box -->
+                        <div id="feedback-box" class="hidden rounded-xl p-4 border text-sm leading-relaxed">
+                            <div class="flex items-start gap-3">
+                                <i id="feedback-icon" class="fa-solid fa-circle-check text-lg mt-0.5"></i>
+                                <div>
+                                    <h5 id="feedback-title" class="font-bold"></h5>
+                                    <p id="feedback-text" class="mt-1 text-xs sm:text-sm"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- OFFICIAL INSTITUTIONAL FOOTER                                         -->
+    <!-- ===================================================================== -->
+    <footer class="bg-navy-950 text-slate-300 border-t border-navy-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm">
+                <div class="flex items-center gap-2 text-slate-400">
+                    <i class="fa-solid fa-scale-balanced text-amber-400"></i>
+                    <span>Academic Statistics Portal • Standard Curriculum Reference</span>
+                </div>
+                <!-- Exact Requested Footer String -->
+                <p class="font-medium text-white text-center sm:text-right tracking-wide">
+                    all rights received via Indian software development association @2026 . Created on order #gom-mat-11-11
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===================================================================== -->
+    <!-- APPLICATION LOGIC & INTERACTIVE SIMULATOR ENGINE                      -->
+    <!-- ===================================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialization Modal Handling
+            const modalBackdrop = document.getElementById('init-modal-backdrop');
+            const acknowledgeBtn = document.getElementById('acknowledge-btn');
+            const reopenNoticeBtn = document.getElementById('reopen-notice-btn');
+
+            function closeInitModal() {
+                modalBackdrop.classList.add('opacity-0');
+                setTimeout(() => {
+                    modalBackdrop.classList.add('hidden');
+                }, 250);
+            }
+
+            function openInitModal() {
+                modalBackdrop.classList.remove('hidden');
+                // Small frame delay to trigger CSS opacity transition
+                requestAnimationFrame(() => {
+                    modalBackdrop.classList.remove('opacity-0');
+                });
+            }
+
+            acknowledgeBtn.addEventListener('click', closeInitModal);
+            reopenNoticeBtn.addEventListener('click', openInitModal);
+
+            // 2. Interactive Student Practice Datasets
+            const datasets = [
+                {
+                    title: "Dataset #1: Bowling Speeds (Descending Order)",
+                    col1: "Speed (km/h)",
+                    col2: "No. of Players",
+                    correctType: "f",
+                    targetIndex: 1,
+                    targetLabel: "140 – 130",
+                    correctFreq: 14,
+                    explanation: "Rule 1 applies: Because proper upper and lower class limits (150–140, 140–130) are given, the count is already Frequency (f)—even when listed in descending order. Thus, f = 14 directly.",
+                    rows: [
+                        { label: "150 – 140", val: 6 },
+                        { label: "140 – 130", val: 14 },
+                        { label: "130 – 120", val: 9 },
+                        { label: "120 – 110", val: 4 }
+                    ]
+                },
+                {
+                    title: "Dataset #2: Student Exam Scores ('Less Than' Type)",
+                    col1: "Marks Obtained",
+                    col2: "Number of Students",
+                    correctType: "standard_cf",
+                    targetIndex: 2,
+                    targetLabel: "20 – 30 (Less than 30)",
+                    correctFreq: 13,
+                    explanation: "Rule 2 applies: 'Less than' indicates Standard cf (non-decreasing: 5, 12, 25, 40). Subtract the previous row from the current row: 25 − 12 = 13.",
+                    rows: [
+                        { label: "Less than 10", val: 5 },
+                        { label: "Less than 20", val: 12 },
+                        { label: "Less than 30", val: 25 },
+                        { label: "Less than 40", val: 40 }
+                    ]
+                },
+                {
+                    title: "Dataset #3: Daily Commute Distance ('More Than' Type)",
+                    col1: "Distance (km)",
+                    col2: "Number of Commuters",
+                    correctType: "reverse_cf",
+                    targetIndex: 1,
+                    targetLabel: "10 – 20 (More than 10)",
+                    correctFreq: 18,
+                    explanation: "Rule 3 applies: 'More than' indicates Reverse cf (non-increasing: 60, 48, 30, 10). Subtract the next row below from the current row: 48 − 30 = 18.",
+                    rows: [
+                        { label: "More than 0", val: 60 },
+                        { label: "More than 10", val: 48 },
+                        { label: "More than 20", val: 30 },
+                        { label: "More than 30", val: 10 }
+                    ]
+                },
+                {
+                    title: "Dataset #4: Zero-Boundary Giveaway ('Less Than' 0 Start)",
+                    col1: "Weight (kg)",
+                    col2: "Count",
+                    correctType: "standard_cf",
+                    targetIndex: 1,
+                    targetLabel: "40 – 50 (Less than 50)",
+                    correctFreq: 9,
+                    explanation: "Rule 4 & Rule 2 apply: Starting at 0 (0, 9, 21, 30) confirms a 'Less than' cumulative column. Subtract the 0-row from the current row: 9 − 0 = 9.",
+                    rows: [
+                        { label: "Less than 40", val: 0 },
+                        { label: "Less than 50", val: 9 },
+                        { label: "Less than 60", val: 21 },
+                        { label: "Less than 70", val: 30 }
+                    ]
+                },
+                {
+                    title: "Dataset #5: Zero-Boundary Giveaway ('More Than' 0 End)",
+                    col1: "Production Units",
+                    col2: "Days",
+                    correctType: "reverse_cf",
+                    targetIndex: 2,
+                    targetLabel: "200 – 300 (More than 200)",
+                    correctFreq: 11,
+                    explanation: "Rule 4 & Rule 3 apply: Ending at 0 (35, 24, 11, 0) confirms a 'More than' reverse cumulative column. Subtract the ending 0-row from the current row: 11 − 0 = 11.",
+                    rows: [
+                        { label: "More than 0", val: 35 },
+                        { label: "More than 100", val: 24 },
+                        { label: "More than 200", val: 11 },
+                        { label: "More than 300", val: 0 }
+                    ]
+                }
+            ];
+
+            let currentIndex = 0;
+            let selectedType = null;
+            let score = 0;
+            let streak = 0;
+            let answeredCurrent = false;
+
+            const datasetTitle = document.getElementById('dataset-title');
+            const datasetBadge = document.getElementById('dataset-badge');
+            const col1Header = document.getElementById('col-1-header');
+            const col2Header = document.getElementById('col-2-header');
+            const simTableBody = document.getElementById('sim-table-body');
+            const step2Question = document.getElementById('step2-question');
+            const freqInput = document.getElementById('freq-input');
+            const verifyBtn = document.getElementById('verify-answer-btn');
+            const nextBtn = document.getElementById('next-problem-btn');
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+            const scoreEl = document.getElementById('sim-score');
+            const streakEl = document.getElementById('sim-streak');
+            const typeBtns = document.querySelectorAll('.type-btn');
+
+            function renderProblem(index) {
+                const data = datasets[index];
+                selectedType = null;
+                answeredCurrent = false;
+                freqInput.value = '';
+                feedbackBox.classList.add('hidden');
+
+                // Reset type buttons
+                typeBtns.forEach(btn => {
+                    btn.classList.remove('border-navy-900', 'bg-navy-900/5', 'ring-2', 'ring-navy-900/20');
+                    btn.classList.add('border-slate-200');
+                });
+
+                datasetTitle.textContent = data.title;
+                datasetBadge.textContent = `${data.rows.length} Rows`;
+                col1Header.textContent = data.col1;
+                col2Header.textContent = data.col2;
+                step2Question.textContent = `Extract Actual Frequency (f) for: ${data.targetLabel}`;
+
+                simTableBody.innerHTML = '';
+                data.rows.forEach((row, idx) => {
+                    const isTarget = idx === data.targetIndex;
+                    const tr = document.createElement('tr');
+                    tr.className = isTarget
+                        ? 'bg-amber-100/80 font-bold text-navy-950'
+                        : 'text-slate-700 hover:bg-slate-50';
+
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-4 flex items-center gap-2">
+                            ${isTarget ? '<span class="w-2 h-2 rounded-full bg-amber-600 shrink-0"></span>' : ''}
+                            <span>${row.label}</span>
+                        </td>
+                        <td class="py-2.5 px-4 text-right">${row.val}</td>
+                    `;
+                    simTableBody.appendChild(tr);
+                });
+            }
+
+            // Option selection handler
+            typeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedType = btn.getAttribute('data-type');
+                    typeBtns.forEach(b => {
+                        b.classList.remove('border-navy-900', 'bg-navy-900/5', 'ring-2', 'ring-navy-900/20');
+                        b.classList.add('border-slate-200');
+                    });
+                    btn.classList.remove('border-slate-200');
+                    btn.classList.add('border-navy-900', 'bg-navy-900/5', 'ring-2', 'ring-navy-900/20');
+                });
+            });
+
+            // Verify solution handler
+            verifyBtn.addEventListener('click', () => {
+                const data = datasets[currentIndex];
+                const userFreq = parseInt(freqInput.value, 10);
+
+                if (!selectedType) {
+                    showFeedback(false, "Step 1 Incomplete", "Please select whether the second column represents Frequency (f), Standard cf, or Reverse cf.");
+                    return;
+                }
+
+                if (isNaN(userFreq)) {
+                    showFeedback(false, "Step 2 Incomplete", "Please enter a valid number for the extracted frequency (f).");
+                    return;
+                }
+
+                const isTypeCorrect = selectedType === data.correctType;
+                const isFreqCorrect = userFreq === data.correctFreq;
+
+                if (isTypeCorrect && isFreqCorrect) {
+                    if (!answeredCurrent) {
+                        score += 10;
+                        streak += 1;
+                        answeredCurrent = true;
+                        updateScoreboard();
+                    }
+                    showFeedback(true, "Correct! Diagnostic Verified (+10 pts)", data.explanation);
+                } else {
+                    streak = 0;
+                    updateScoreboard();
+                    let errorMsg = "";
+                    if (!isTypeCorrect && !isFreqCorrect) {
+                        errorMsg = `Both the column classification and the extracted frequency (${userFreq}) need revision. ${data.explanation}`;
+                    } else if (!isTypeCorrect) {
+                        errorMsg = `Your frequency calculation (${userFreq}) is right, but check the column classification! ${data.explanation}`;
+                    } else {
+                        errorMsg = `Your column classification is spot on, but check your subtraction for f! ${data.explanation}`;
+                    }
+                    showFeedback(false, "Incorrect — Review the Rule Below", errorMsg);
+                }
+            });
+
+            function showFeedback(isSuccess, title, message) {
+                feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-300', 'text-emerald-950', 'bg-rose-50', 'border-rose-300', 'text-rose-950');
+                feedbackIcon.classList.remove('fa-circle-check', 'text-emerald-600', 'fa-triangle-exclamation', 'text-rose-600');
+
+                if (isSuccess) {
+                    feedbackBox.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-950');
+                    feedbackIcon.classList.add('fa-circle-check', 'text-emerald-600');
+                } else {
+                    feedbackBox.classList.add('bg-rose-50', 'border-rose-300', 'text-rose-950');
+                    feedbackIcon.classList.add('fa-triangle-exclamation', 'text-rose-600');
+                }
+
+                feedbackTitle.textContent = title;
+                feedbackText.textContent = message;
+            }
+
+            function updateScoreboard() {
+                scoreEl.textContent = score;
+                streakEl.textContent = `${streak} 🔥`;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % datasets.length;
+                renderProblem(currentIndex);
+            });
+
+            // Initialize first dataset
+            renderProblem(currentIndex);
+        });
+    </script>
+</body>
+</html>
