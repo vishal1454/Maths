@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master AI Verification Prompt | Statistics Curriculum Portal</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --danger-bg: #451a03;
+            --danger-border: #78350f;
+            --danger-text: #fde047;
+            --success: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        /* Top Bar & Review Banner */
+        .top-bar {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .reopen-alert-btn {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reopen-alert-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-main);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Card Style */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        /* Prompt Box container */
+        .prompt-wrapper {
+            position: relative;
+            background: #0b0f19;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 16px;
+            max-height: 350px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        /* Action Buttons Row */
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #0f172a;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: #334155;
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .ai-links-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 800px;
+            margin: 40px auto 0 auto;
+            width: 100%;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+        }
+
+        /* Modal Overlay for Initialization Alert */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .alert-card {
+            background-color: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            border-radius: 12px;
+            padding: 28px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .alert-title {
+            color: var(--danger-text);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alert-body {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #fef08a;
+            margin-bottom: 20px;
+        }
+
+        .alert-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .ack-btn {
+            background-color: var(--danger-text);
+            color: #451a03;
+            border: none;
+            padding: 8px 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .ack-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: #0f172a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Initialization / Review Alert Modal -->
+    <div id="alertModal" class="modal-overlay">
+        <div class="alert-card">
+            <div class="alert-title">
+                ⚠️ System Notice & Review Status
+            </div>
+            <div class="alert-body">
+                Alert this website is not secure, website under review by the faculty, this web is made by bot1454 on order from Mr.Vishal(CTO) , and website is in review from Vishal and his institution.
+            </div>
+            <div class="alert-footer">
+                <button class="ack-btn" onclick="closeAlert()">Acknowledge & Enter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="review-badge">Status: Under Faculty Review</div>
+        <button class="reopen-alert-btn" onclick="openAlert()">View Notice</button>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <div class="card">
+            <h1>Master AI Verification Prompt</h1>
+            <p class="subtitle">Complete 4-Rule Statistical Diagnostic Framework & Mathematical Defense Prompt</p>
+
+            <div class="prompt-wrapper" id="promptText">Act as a senior professor of mathematics and statistics specializing in secondary school curriculum standards (CBSE/NCERT). Please evaluate the following 4-rule diagnostic framework for identifying and converting Grouped Frequency Distribution Tables, and confirm whether it is mathematically rigorous, complete, and textbook-accurate:
+
+---
+
+### The 4-Rule Statistical Diagnostic Framework
+
+- Rule 1 (Proper Limits = f): If the Class Intervals have proper upper and lower limits (e.g., 10–20, 20–30), the given column is standard Frequency (f). Raw frequencies can naturally fluctuate, BUT they can also be in strict ascending or descending order depending on the underlying data distribution (e.g., skewed distributions or exponential decay curves). The order of values alone does NOT force a column to be cf.
+- Rule 2 ("Less Than" = Standard cf): If class intervals use "Less than" or "Below," the column is standard Cumulative Frequency (cf), which is non-decreasing (goes up or stays equal). To extract individual interval frequency f, subtract the previous row's cf from the current row's cf (2nd - 1st).
+- Rule 3 ("More Than" = Reverse cf): If class intervals use "More than" or "Above," the column is Reverse Cumulative Frequency (greater-than cf), which is non-increasing (goes down or stays equal). To extract individual interval frequency f, subtract the next row's cf from the current row's cf (1st - 2nd).
+- Rule 4 (The 0 Giveaway): If a cumulative column starts at 0 (e.g., 0, 5, 12...), it is a "Less than" cf starting from below the lowest lower limit. If it ends at 0 (e.g., ...12, 7, 0), it is a "More than" cf ending above the highest upper limit. Use the 0 boundary to subtract adjacent entries and extract f, then drop the extra 0 row.
+
+---
+
+### Specific Technical Questions to Address:
+1. Is it mathematically sound to state that raw frequency (f) CAN be strictly ascending or descending in real-world/theoretical datasets, and that stating "f must always be messy/mixed" is a misconception?
+2. Specifically evaluate this exact statement for a student defending their table analysis:
+   "Mam, while cf must mathematically be ascending and reverse cf must be descending, raw frequency (f) depends entirely on the sample data shape. If a dataset follows an exponential or skewed curve, raw frequencies (f) can naturally form a strictly ascending or descending sequence without being cumulative totals."
+3. Are all 4 rules completely valid for solving board examination problems involving Mean, Median, Mode, and Ogive conversions?
+
+Please provide a clear, professional academic verdict explaining each point step-by-step.
+            <div class="actions-row">
+                <button class="btn btn-primary" onclick="copyPrompt()">
+                    📋 Copy Prompt
+                </button>
+                <div class="ai-links-group">
+                    <a href="https://chatgpt.com" target="_blank" class="btn btn-secondary">Open ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="btn btn-secondary">Open Gemini</a>
+                    <a href="https://www.google.com/search?q=AI+Search" target="_blank" class="btn btn-secondary">AI Search</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Institutional Footer -->
+    <footer>
+        All rights received via Indian software development association @2026 . Created on order #gom-mat-11-11
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Prompt copied to clipboard!</div>
+
+    <script>
+        function closeAlert() {
+            document.getElementById('alertModal').classList.add('hidden');
+        }
+
+        function openAlert() {
+            document.getElementById('alertModal').classList.remove('hidden');
+        }
+
+        function copyPrompt() {
+            const text = document.getElementById('promptText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2500);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
